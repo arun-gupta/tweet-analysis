@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import twitter4j.ResponseList;
+import java.util.List;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -20,10 +20,10 @@ import twitter4j.auth.RequestToken;
 public class GetFeed {
 
     public static void main(String[] args) {
-        new GetFeed().readFeed();
+        new GetFeed().readFeed(args[0]);
     }
 
-    void readFeed() {
+    void readFeed(String user) {
         try {
             Twitter twitter = new TwitterFactory().getInstance();
             TwitterCredentials creds = readCredentials();
@@ -42,12 +42,12 @@ public class GetFeed {
             System.out.println("Access Token Secret: " + accessToken.getTokenSecret());
 
             // I'm reading your timeline
-            ResponseList list = twitter.getHomeTimeline();
-            list.stream().forEach((each) -> {
+            List<Status> list = twitter.getUserTimeline(user);
+            list.stream().forEach((status) -> {
                 System.out.println("Sent by: @" 
-                        + ((Status) each).getUser().getScreenName()
-                        + " - " + ((Status) each).getUser().getName() 
-                        + "\n" + ((Status) each).getText()
+                        + status.getUser().getScreenName()
+                        + " - " + status.getUser().getName() 
+                        + "\n" + status.getText()
                         + "\n");
             });
         } catch (TwitterException | IOException ex) {
@@ -62,6 +62,5 @@ public class GetFeed {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 }
