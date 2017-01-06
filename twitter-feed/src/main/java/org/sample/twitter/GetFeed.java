@@ -13,6 +13,7 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
+import twitter4j.conf.ConfigurationBuilder;
 
 /**
  * Hello world!
@@ -25,21 +26,28 @@ public class GetFeed {
 
     void readFeed(String user) {
         try {
-            Twitter twitter = new TwitterFactory().getInstance();
             TwitterCredentials creds = readCredentials();
-            twitter.setOAuthConsumer(creds.getKey(), creds.getSecret());
-            RequestToken requestToken = twitter.getOAuthRequestToken();
-            System.out.println("Authorization URL: \n" + requestToken.getAuthorizationURL());
+            ConfigurationBuilder conf = new ConfigurationBuilder();
+            conf.setOAuthConsumerKey(creds.getConsumerKey());
+            conf.setOAuthConsumerSecret(creds.getConsumerSecret());
+            conf.setOAuthAccessToken(creds.getAccessToken());
+            conf.setOAuthAccessTokenSecret(creds.getAccessSecret());
+            Twitter twitter = new TwitterFactory(conf.build()).getInstance();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-            System.out.print("Hit above Authorization URL and Input PIN here: ");
-            String pin = br.readLine();
-
-            AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pin);
-
-            System.out.println("Access Token: " + accessToken.getToken());
-            System.out.println("Access Token Secret: " + accessToken.getTokenSecret());
+// Use to get access token and secret
+//            twitter.setOAuthConsumer(creds.getConsumerKey(), creds.getConsumerSecret());
+//            RequestToken requestToken = twitter.getOAuthRequestToken();
+//            System.out.println("Authorization URL: \n" + requestToken.getAuthorizationURL());
+//
+//            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//
+//            System.out.print("Hit above Authorization URL and Input PIN here: ");
+//            String pin = br.readLine();
+//
+//            AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pin);
+//
+//            System.out.println("Access Token: " + accessToken.getToken());
+//            System.out.println("Access Token Secret: " + accessToken.getTokenSecret());
 
             // I'm reading your timeline
             List<Status> list = twitter.getUserTimeline(user);
@@ -50,7 +58,7 @@ public class GetFeed {
                         + "\n" + status.getText()
                         + "\n");
             });
-        } catch (TwitterException | IOException ex) {
+        } catch (TwitterException ex) {
             throw new RuntimeException(ex);
         }
     }
