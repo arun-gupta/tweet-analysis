@@ -4,22 +4,40 @@ package org.sample.twitter;
  * @author arungupta
  */
 public class TwitterCredentials {
-    public String key;
-    public String secret;
+    private String consumerKey;
+    private String consumerSecret;
+    private String accessToken;
+    private String accessSecret;
 
-    public String getKey() {
-        return key;
+    public String getConsumerKey() {
+        return consumerKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setConsumerKey(String key) {
+        this.consumerKey = key;
     }
 
-    public String getSecret() {
-        return secret;
+    public String getConsumerSecret() {
+        return consumerSecret;
     }
 
-    public void setSecret(String secret) {
-        this.secret = secret;
+    public void setConsumerSecret(String secret) {
+        this.consumerSecret = secret;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getAccessSecret() {
+        return accessSecret;
+    }
+
+    public void setAccessSecret(String accessSecret) {
+        this.accessSecret = accessSecret;
     }
 }
