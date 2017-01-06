@@ -7,6 +7,9 @@
     <version>1.0-SNAPSHOT</version>
     <name>twitter-feed</name>
     <url>http://maven.apache.org</url>
+    <properties>
+        <twitter.user>realDonaldTrump</twitter.user>
+    </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.twitter4j/twitter4j-core -->
         <dependency>
@@ -44,6 +47,9 @@
                 </executions>
                 <configuration>
                     <mainClass>org.sample.twitter.GetFeed</mainClass>
+                    <arguments>
+                        <argument>${twitter.user}</argument>
+                    </arguments>
                 </configuration>
             </plugin>
         </plugins>
