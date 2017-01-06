@@ -9,6 +9,7 @@ import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterObjectFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
@@ -32,7 +33,10 @@ public class TwitterFeed {
             Twitter twitter = new TwitterFactory(twitterConfig.build()).getInstance();
 
             List<Status> list = twitter.getUserTimeline(user);
+
             list.stream().forEach((status) -> {
+                TwitterObjectFactory.getRawJSON(status);
+                System.out.println(status);
                 System.out.println("Sent by: @" 
                         + status.getUser().getScreenName()
                         + " - " + status.getUser().getName() 
