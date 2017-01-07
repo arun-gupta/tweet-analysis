@@ -1,2 +1,18 @@
 = Analyze Twitter Feeds using N1QL
 
+. Get home timeline of pre-defined user: `mvn package exec:java`
+. Get home timeline a specific user: `mvn package exec:java -Dtwitter.user=arungupta`
+
+== Deploy Lambda
+
+. Configure Couchbase using https://aws.amazon.com/marketplace/fulfillment?productId=18fb29ef-1fd6-4165-90fc-dfce2c516af9
+. Create package: `mvn package`
+. Upload JAR to S3: `aw s3 cp target/twitter-feed-1.0-SNAPSHOT.jar s3://arungupta.me/twitter-feed-1.0-SNAPSHOT.jar
+. Deploy Lambda:
++
+```
+aws cloudformation deploy \
+--template-file template.yml \
+--stack-name twitter-feed
+```
+
