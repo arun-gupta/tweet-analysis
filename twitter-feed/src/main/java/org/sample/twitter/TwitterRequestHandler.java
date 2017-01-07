@@ -6,13 +6,16 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 /**
  * @author arungupta
  */
-public class TwitterRequestHandler implements RequestHandler<String, String> {
+public class TwitterRequestHandler implements RequestHandler<Request, String> {
 
     @Override
-    public String handleRequest(String name, Context context) {
-        new TwitterFeed().readFeed("arungupta");
+    public String handleRequest(Request request, Context context) {
+        if (request.getName() != null)
+            request.setName("arungupta");
         
-        return null;
+        new TwitterFeed().readFeed(request.getName());
+        
+        return request.getName();
     }
     
 }

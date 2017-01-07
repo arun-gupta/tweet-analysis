@@ -35,8 +35,11 @@ public class TwitterFeed {
             List<Status> list = twitter.getUserTimeline(user);
 
             list.stream().forEach((status) -> {
-                TwitterObjectFactory.getRawJSON(status);
-                System.out.println(status);
+//                String json = TwitterObjectFactory.getRawJSON(status);
+//                CouchbaseUtil.toJson(status);
+                CouchbaseUtil.saveJson(status);
+//                json = json.substring(json.indexOf("{"), json.lastIndexOf("}"));
+//                System.out.println(TwitterObjectFactory.getRawJSON(status));
                 System.out.println("Sent by: @" 
                         + status.getUser().getScreenName()
                         + " - " + status.getUser().getName() 

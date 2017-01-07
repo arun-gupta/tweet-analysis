@@ -55,6 +55,12 @@
                     <arguments>
                         <argument>${twitter.user}</argument>
                     </arguments>
+                    <systemProperties>
+                        <systemproperty>
+                            <key>COUCHBASE_HOST</key>
+                            <value>${couchbase.host}</value>
+                        </systemproperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
             <plugin>
