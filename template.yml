@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Twitter Feed Analysis
+Resources:
+  TrumpFeed:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: org.sample.twitter.TwitterRequestHandler
+      Runtime: java8
+      CodeUri: s3://arungupta.me/twitter-feed-1.0-SNAPSHOT.jar
+      Timeout: 30
+      MemorySize: 1024
+      Environment:
+        Variables:
+          COUCHBASE_HOST: ec2-35-165-150-206.us-west-2.compute.amazonaws.com
+      Role: arn:aws:iam::598307997273:role/microserviceRole
