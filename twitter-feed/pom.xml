@@ -9,7 +9,7 @@
     <url>http://maven.apache.org</url>
     <properties>
         <twitter.user>realDonaldTrump</twitter.user>
-        <couchbase.host>ec2-35-165-150-206.us-west-2.compute.amazonaws.com</couchbase.host>
+        <couchbase.host>ec2-35-166-14-124.us-west-2.compute.amazonaws.com</couchbase.host>
     </properties>
     <dependencies>
         <dependency>
