@@ -10,7 +10,6 @@ import twitter4j.auth.RequestToken;
 import twitter4j.auth.AccessToken;
 
 /**
- *
  * @author arungupta
  */
 public class AccessTokenCredentials {
