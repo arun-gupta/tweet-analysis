@@ -1,18 +1,36 @@
 = Analyze Twitter Feeds using N1QL
 
+== Configure Twitter Credentials
+
+. Create a new app: https://apps.twitter.com/app/new
+. TODO
+
+== Run Application using CLI
+
 . Get home timeline of pre-defined user: `mvn package exec:java`
 . Get home timeline a specific user: `mvn package exec:java -Dtwitter.user=arungupta`
 
+== Setup Couchbase
+
+. Launch `Ubuntu Server 14.04 LTS` EC2 instance
+. Login to the instance: `ssh -i <key> ubuntu@<public-ip>`
+. Download Couchbase: `wget http://packages.couchbase.com/releases/4.5.0/couchbase-server-community_4.5.0-ubuntu14.04_amd64.deb`
+. Install Couchbase: `sudo dpkg -i couchbase-server-community_4.5.0-ubuntu14.04_amd64.deb`
+. Login to Couchbase Console http://<public-ip>:8091 and configure Data, Query and Index service
+. Create a bucket `twitter`
+. Create primary index `create primary index on twitter;`
+. Create secondary index `create index twitter_created_at on twitter(createdAt);`
+
 == Deploy Lambda
 
-. Configure Couchbase using https://aws.amazon.com/marketplace/fulfillment?productId=18fb29ef-1fd6-4165-90fc-dfce2c516af9
 . Create package: `mvn package`
-. Upload JAR to S3: `aw s3 cp target/twitter-feed-1.0-SNAPSHOT.jar s3://arungupta.me/twitter-feed-1.0-SNAPSHOT.jar
+. Upload JAR to S3: `aws s3 cp target/twitter-feed-1.0-SNAPSHOT.jar s3://arungupta.me/twitter-feed-1.0-SNAPSHOT.jar`
 . Deploy Lambda:
 +
 ```
 aws cloudformation deploy \
 --template-file template.yml \
---stack-name twitter-feed
+--stack-name twitter-feed \
+--region us-west-2
 ```
 
