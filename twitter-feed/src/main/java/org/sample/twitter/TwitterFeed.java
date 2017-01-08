@@ -1,7 +1,6 @@
 package org.sample.twitter;
 
 import com.couchbase.client.deps.com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -35,6 +34,10 @@ public class TwitterFeed {
             }
             System.out.println("Trying " + count + " tweets since " + sinceId + " ...");
             List<Status> list = twitter.getUserTimeline(user, paging);
+            if (list.isEmpty()) {
+                System.out.println("... no new tweets found since " + sinceId);
+                return;
+            }
 
             list.stream().forEach((Status status) -> {
 //                String json = TwitterObjectFactory.getRawJSON(status);
@@ -63,7 +66,8 @@ public class TwitterFeed {
     }
 
     static TwitterCredentials readCredentials() {
-        try (InputStream is = new FileInputStream("twitter.json")) {
+        ClassLoader classLoader = new TwitterFeed().getClass().getClassLoader();
+        try (InputStream is = classLoader.getResourceAsStream("twitter.json")) {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(is, TwitterCredentials.class);
         } catch (IOException ex) {
