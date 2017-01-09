@@ -33,3 +33,46 @@ aws cloudformation deploy \
 --stack-name twitter-feed \
 --region us-west-2
 ```
+
+== Configure Database Backup
+
+. Login to host: `ssh -i ~/.ssh/arun-cb-west2.pem ubuntu@<public-ip>`
+. Configure `s3cmd`
+.. Import S3tools signing key: `wget -O- -q http://s3tools.org/repo/deb-all/stable/s3tools.key | sudo apt-key add -`
+.. Add the repo to `sources.list`: `sudo wget -O/etc/apt/sources.list.d/s3tools.list http://s3tools.org/repo/deb-all/stable/s3tools.list`
+.. Refresh package cache and install the newest s3cmd: `sudo apt-get update && sudo apt-get install s3cmd`
+.. Configure s3cmd: `s3cmd --configure`
++
+```
+New settings:
+  Access Key: <access key>
+  Secret Key: <secret key>
+  Encryption password: <password>
+  Path to GPG program: /usr/bin/gpg
+  Use HTTPS protocol: False
+  HTTP Proxy server name: 
+  HTTP Proxy server port: 0
+```
++
+. Backup
+.. Make backup directory: `sudo mkdir /opt/couchbase/backup`
+.. Change perms: `sudo chmod 777 /opt/couchbase/backup`
+.. Backup: `/opt/couchbase/bin/cbbackup http://localhost:8091 ./backup -u Administrator -p password`
+. Upload to S3: `s3cmd --recursive put ./backup/2017-01-09T141646Z s3://arungupta.me/twitter-feed.backup/`
++
+```
+WARNING: Module python-magic is not available. Guessing MIME types based on file extensions.
+./backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/index.json -> s3://arungupta.me/twitter-feed.backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/index.json  [1 of 6]
+ 1208 of 1208   100% in    0s    28.00 kB/s  done
+./backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/data-0000.cbb -> s3://arungupta.me/twitter-feed.backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/data-0000.cbb  [2 of 6]
+ 530432 of 530432   100% in    0s    11.16 MB/s  done
+./backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/failover.json -> s3://arungupta.me/twitter-feed.backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/failover.json  [3 of 6]
+ 31202 of 31202   100% in    0s   983.59 kB/s  done
+./backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/meta.json -> s3://arungupta.me/twitter-feed.backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/meta.json  [4 of 6]
+ 12 of 12   100% in    0s   126.95 B/s  done
+./backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/seqno.json -> s3://arungupta.me/twitter-feed.backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/seqno.json  [5 of 6]
+ 1042 of 1042   100% in    0s    20.50 kB/s  done
+./backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/snapshot_markers.json -> s3://arungupta.me/twitter-feed.backup/2017-01-09T141646Z/2017-01-09T141646Z-full/bucket-twitter/node-127.0.0.1%3A8091/snapshot_markers.json  [6 of 6]
+ 1567 of 1567   100% in    0s     7.44 kB/s  done
+```
+
