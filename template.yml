@@ -15,7 +15,7 @@ Resources:
           COUCHBASE_HOST: ec2-35-166-14-124.us-west-2.compute.amazonaws.com
       Role: arn:aws:iam::598307997273:role/microserviceRole
       Events:
-        Every6Hours:
+        Timer:
           Type: Schedule
           Properties:
-            Schedule: rate(6 hours)
+            Schedule: rate(3 hours)
