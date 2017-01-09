@@ -33,4 +33,3 @@ aws cloudformation deploy \
 --stack-name twitter-feed \
 --region us-west-2
 ```
-
