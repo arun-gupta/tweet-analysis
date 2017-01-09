@@ -56,6 +56,18 @@ public class TwitterFeed {
 
     private Twitter getTwitter() {
         TwitterCredentials creds = readCredentials();
+        if (creds.getConsumerKey() == null) {
+            throw new RuntimeException("Incorrect Twitter client configuration: Consumer key is null");
+        }
+        if (creds.getConsumerSecret() == null) {
+            throw new RuntimeException("Incorrect Twitter client configuration: Consumer secret is null");
+        }
+        if (creds.getAccessSecret() == null) {
+            throw new RuntimeException("Incorrect Twitter client configuration: Access secret is null");
+        }
+        if (creds.getAccessToken() == null) {
+            throw new RuntimeException("Incorrect Twitter client configuration: Access token is null");
+        }
         ConfigurationBuilder twitterConfig = new ConfigurationBuilder();
         twitterConfig.setOAuthConsumerKey(creds.getConsumerKey());
         twitterConfig.setOAuthConsumerSecret(creds.getConsumerSecret());
@@ -68,6 +80,9 @@ public class TwitterFeed {
     static TwitterCredentials readCredentials() {
         ClassLoader classLoader = new TwitterFeed().getClass().getClassLoader();
         try (InputStream is = classLoader.getResourceAsStream("twitter.json")) {
+            if (is == null) {
+                throw new RuntimeException("Incorrect Twitter client configuration: Configuration file not found");
+            }
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(is, TwitterCredentials.class);
         } catch (IOException ex) {

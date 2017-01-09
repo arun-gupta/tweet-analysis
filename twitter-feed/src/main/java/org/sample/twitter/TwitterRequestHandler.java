@@ -10,12 +10,12 @@ public class TwitterRequestHandler implements RequestHandler<Request, String> {
 
     @Override
     public String handleRequest(Request request, Context context) {
-        if (request.getName() != null)
+        if (request.getName() == null)
             request.setName("realDonaldTrump");
         
         new TwitterFeed().readFeed(request.getName());
         
-        return request.getName();
+        return "Updated tweets for " + request.getName() + "!";
     }
     
 }
