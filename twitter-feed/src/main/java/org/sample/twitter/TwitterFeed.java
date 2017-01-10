@@ -24,7 +24,7 @@ public class TwitterFeed {
         try {
             Twitter twitter = getTwitter();
             int page = 1;
-            int count = 100;
+            int count = 200;
             long sinceId = CouchbaseUtil.lastTweetId();
             Paging paging;
             if (sinceId > 0) {
@@ -37,6 +37,8 @@ public class TwitterFeed {
             if (list.isEmpty()) {
                 System.out.println("... no new tweets found since " + sinceId);
                 return;
+            } else {
+                System.out.println("... found " + list.size() + " tweets found.");
             }
 
             list.stream().forEach((Status status) -> {
