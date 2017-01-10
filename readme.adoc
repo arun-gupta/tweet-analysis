@@ -26,7 +26,15 @@
 ```
 aws cloudformation deploy \
 --template-file template.yml \
---stack-name twitter-feed \
+--stack-name twitter \
+--region us-west-2
+```
++
+. Delete the stack (if an stack needs to be updated):
++
+```
+aws cloudformation delete-stack \
+--stack-name twitter \
 --region us-west-2
 ```
 
