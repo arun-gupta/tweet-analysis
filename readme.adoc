@@ -12,11 +12,7 @@
 
 == Setup Couchbase
 
-. Launch `Ubuntu Server 14.04 LTS` EC2 instance
-. Login to the instance: `ssh -i <key> ubuntu@<public-ip>`
-. Download Couchbase: `wget http://packages.couchbase.com/releases/4.5.0/couchbase-server-community_4.5.0-ubuntu14.04_amd64.deb`
-. Install Couchbase: `sudo dpkg -i couchbase-server-community_4.5.0-ubuntu14.04_amd64.deb`
-. Login to Couchbase Console http://<public-ip>:8091 and configure Data, Query and Index service
+. Setup Couchbase as explained at https://github.com/couchbase-guides/couchbase-amazon-cli
 . Create a bucket `twitter`
 . Create primary index `create primary index on twitter;`
 . Create secondary index `create index twitter_created_at on twitter(createdAt);`
