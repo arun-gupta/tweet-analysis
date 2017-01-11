@@ -86,113 +86,229 @@ WARNING: Module python-magic is not available. Guessing MIME types based on file
 +
 .Query
 [source, text]
-====
+----
 select count(*) from twitter;
-====
+----
 +
 .Result
 [source, json]
-====
+----
 [
   {
     "$1": 203
   }
 ]
-====
+----
++
+. One tweet
++
+.Query
+[source, text]
+----
+select * from twitter LIMIT 1;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "twitter": {
+      "accessLevel": "0",
+      "contributors": [],
+      "createdAt": "1480828438000",
+      "currentUserRetweetId": "-1",
+      "displayTextRangeEnd": "-1",
+      "displayTextRangeStart": "-1",
+      "favoriteCount": "116356",
+      "favorited": false,
+      "geoLocation": null,
+      "hashtagEntities": [],
+      "id": "805278955150471168",
+      "inReplyToScreenName": null,
+      "inReplyToStatusId": "-1",
+      "inReplyToUserId": "-1",
+      "lang": "en",
+      "mediaEntities": [],
+      "place": null,
+      "possiblySensitive": false,
+      "quotedStatus": null,
+      "quotedStatusId": "-1",
+      "rateLimitStatus": null,
+      "retweet": false,
+      "retweetCount": "28330",
+      "retweeted": false,
+      "retweetedByMe": false,
+      "retweetedStatus": null,
+      "scopes": null,
+      "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+      "symbolEntities": [],
+      "text": "Just tried watching Saturday Night Live - unwatchable! Totally biased, not funny and the Baldwin impersonation just can't get any worse. Sad",
+      "truncated": false,
+      "urlentities": [],
+      "user": {
+        "accessLevel": "0",
+        "biggerProfileImageURL": "http://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_bigger.jpg",
+        "biggerProfileImageURLHttps": "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_bigger.jpg",
+        "contributorsEnabled": false,
+        "createdAt": "1237383998000",
+        "defaultProfile": false,
+        "defaultProfileImage": false,
+        "description": "President-elect of the United States",
+        "descriptionURLEntities": [],
+        "email": null,
+        "favouritesCount": "46",
+        "followRequestSent": false,
+        "followersCount": "19294404",
+        "friendsCount": "42",
+        "geoEnabled": true,
+        "id": "25073877",
+        "lang": "en",
+        "listedCount": "52499",
+        "location": "New York, NY",
+        "miniProfileImageURL": "http://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_mini.jpg",
+        "miniProfileImageURLHttps": "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_mini.jpg",
+        "name": "Donald J. Trump",
+        "originalProfileImageURL": "http://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2.jpg",
+        "originalProfileImageURLHttps": "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2.jpg",
+        "profileBackgroundColor": "6D5C18",
+        "profileBackgroundImageURL": "http://pbs.twimg.com/profile_background_images/530021613/trump_scotland__43_of_70_cc.jpg",
+        "profileBackgroundImageUrlHttps": "https://pbs.twimg.com/profile_background_images/530021613/trump_scotland__43_of_70_cc.jpg",
+        "profileBackgroundTiled": true,
+        "profileBannerIPadRetinaURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/ipad_retina",
+        "profileBannerIPadURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/ipad",
+        "profileBannerMobileRetinaURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/mobile_retina",
+        "profileBannerMobileURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/mobile",
+        "profileBannerRetinaURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/web_retina",
+        "profileBannerURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/web",
+        "profileImageURL": "http://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_normal.jpg",
+        "profileImageURLHttps": "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_normal.jpg",
+        "profileLinkColor": "0D5B73",
+        "profileSidebarBorderColor": "BDDCAD",
+        "profileSidebarFillColor": "C5CEC0",
+        "profileTextColor": "333333",
+        "profileUseBackgroundImage": true,
+        "protected": false,
+        "rateLimitStatus": null,
+        "screenName": "realDonaldTrump",
+        "showAllInlineMedia": false,
+        "status": null,
+        "statusesCount": "34269",
+        "timeZone": "Eastern Time (US & Canada)",
+        "translator": false,
+        "url": "https://t.co/mZB2hymxC9",
+        "urlentity": {
+          "displayURL": "https://t.co/mZB2hymxC9",
+          "end": "23",
+          "expandedURL": "https://t.co/mZB2hymxC9",
+          "start": "0",
+          "text": "https://t.co/mZB2hymxC9",
+          "url": "https://t.co/mZB2hymxC9"
+        },
+        "utcOffset": "-18000",
+        "verified": true,
+        "withheldInCountries": null
+      },
+      "userMentionEntities": [],
+      "withheldInCountries": null
+    }
+  }
+]
+----
 +
 . Most tweets in a day
 +
 .Query
 [source, text]
-====
-====
+----
+----
 +
 .Result
 [source, json]
-====
-====
+----
+----
 +
 . Most common hour in a day to tweet
 +
 .Query
 [source, text]
-====
-====
+----
+----
 +
 .Result
 [source, json]
-====
-====
+----
+----
 +
 . Most common day of the week to tweet
 +
 .Query
 [source, text]
-====
-====
+----
+----
 +
 .Result
 [source, json]
-====
-====
+----
+----
 +
 . Top 5 hashtags and counts in tweets
 +
 .Query
 [source, text]
-====
-====
+----
+----
 +
 .Result
 [source, json]
-====
-====
+----
+----
 +
 . Number of tweets on pre-defined topics: A, B, C
 +
 .Query
 [source, text]
-====
-====
+----
+----
 +
 .Result
 [source, json]
-====
-====
+----
+----
 +
 . Top 3 mentions in tweets
 +
 .Query
 [source, text]
-====
-====
+----
+----
 +
 .Result
 [source, json]
-====
-====
+----
+----
 +
 . Top 3 tweets with RTs and Favorites
 +
 .Query
 [source, text]
-====
-====
+----
+----
 +
 .Result
 [source, json]
-====
-====
+----
+----
 +
 . Original tweets vs RTs
 +
 .Query
 [source, text]
-====
-====
+----
+----
 +
 .Result
 [source, json]
-====
-====
+----
+----
 
