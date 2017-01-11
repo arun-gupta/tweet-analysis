@@ -83,11 +83,92 @@ WARNING: Module python-magic is not available. Guessing MIME types based on file
 == Queries
 
 . How many tweets are stored in this database?
-. What days tweeting is the most?
++
+.Query
+[source, text]
+====
+select count(*) from twitter;
+====
++
+.Result
+[source, json]
+====
+[
+  {
+    "$1": 203
+  }
+]
+====
++
 . What time tweeting is the most?
++
+.Query
+[source, text]
+====
+====
++
+.Result
+[source, json]
+====
+====
++
 . Top 5 hashtags and counts in tweets
++
+.Query
+[source, text]
+====
+====
++
+.Result
+[source, json]
+====
+====
++
 . How many tweets on Hillary, Mexico, Media
++
+.Query
+[source, text]
+====
+====
++
+.Result
+[source, json]
+====
+====
++
 . Top 5 mentions in tweets
++
+.Query
+[source, text]
+====
+====
++
+.Result
+[source, json]
+====
+====
++
 . Top 5 tweets with RTs and Favorites
++
+.Query
+[source, text]
+====
+====
++
+.Result
+[source, json]
+====
+====
++
 . How many original vs RTs
++
+.Query
+[source, text]
+====
+====
++
+.Result
+[source, json]
+====
+====
 
