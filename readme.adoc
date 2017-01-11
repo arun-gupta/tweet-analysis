@@ -82,7 +82,7 @@ WARNING: Module python-magic is not available. Guessing MIME types based on file
 
 == Queries
 
-. How many tweets are stored in this database?
+. Number of tweets stored
 +
 .Query
 [source, text]
@@ -100,7 +100,31 @@ select count(*) from twitter;
 ]
 ====
 +
-. What time tweeting is the most?
+. Most tweets in a day
++
+.Query
+[source, text]
+====
+====
++
+.Result
+[source, json]
+====
+====
++
+. Most common hour in a day to tweet
++
+.Query
+[source, text]
+====
+====
++
+.Result
+[source, json]
+====
+====
++
+. Most common day of the week to tweet
 +
 .Query
 [source, text]
@@ -124,7 +148,7 @@ select count(*) from twitter;
 ====
 ====
 +
-. How many tweets on Hillary, Mexico, Media
+. Number of tweets on pre-defined topics: A, B, C
 +
 .Query
 [source, text]
@@ -136,7 +160,7 @@ select count(*) from twitter;
 ====
 ====
 +
-. Top 5 mentions in tweets
+. Top 3 mentions in tweets
 +
 .Query
 [source, text]
@@ -148,7 +172,7 @@ select count(*) from twitter;
 ====
 ====
 +
-. Top 5 tweets with RTs and Favorites
+. Top 3 tweets with RTs and Favorites
 +
 .Query
 [source, text]
@@ -160,7 +184,7 @@ select count(*) from twitter;
 ====
 ====
 +
-. How many original vs RTs
+. Original tweets vs RTs
 +
 .Query
 [source, text]
