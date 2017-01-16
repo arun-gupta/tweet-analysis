@@ -216,16 +216,44 @@ select * from twitter LIMIT 1;
 ]
 ----
 +
-. Most tweets in a day
+. Top 5 tweeting days
 +
 .Query
 [source, text]
 ----
+SELECT SUBSTR(millis_to_str(to_num(createdAt)), 0, 10) tweet_date, 
+       COUNT(1) tweet_count
+FROM   twitter 
+GROUP  BY SUBSTR(millis_to_str(to_num(createdAt)), 0, 10) 
+ORDER  BY COUNT(1) DESC 
+LIMIT  5;
 ----
 +
 .Result
 [source, json]
 ----
+[
+  {
+    "tweet_count": 12,
+    "tweet_date": "2017-01-06"
+  },
+  {
+    "tweet_count": 11,
+    "tweet_date": "2016-12-04"
+  },
+  {
+    "tweet_count": 10,
+    "tweet_date": "2017-01-03"
+  },
+  {
+    "tweet_count": 10,
+    "tweet_date": "2017-01-04"
+  },
+  {
+    "tweet_count": 9,
+    "tweet_date": "2016-12-10"
+  }
+]
 ----
 +
 . Most common hour in a day to tweet
@@ -233,11 +261,39 @@ select * from twitter LIMIT 1;
 .Query
 [source, text]
 ----
+SELECT SUBSTR(millis_to_str(to_num(createdAt)), 11, 2) tweet_hour, 
+       COUNT(1) tweet_count
+FROM   twitter 
+GROUP  BY SUBSTR(millis_to_str(to_num(createdAt)), 11, 2) 
+ORDER  BY tweet_count DESC 
+LIMIT  5;
 ----
 +
 .Result
 [source, json]
 ----
+[
+  {
+    "tweet_count": 33,
+    "tweet_hour": "13"
+  },
+  {
+    "tweet_count": 25,
+    "tweet_hour": "11"
+  },
+  {
+    "tweet_count": 24,
+    "tweet_hour": "12"
+  },
+  {
+    "tweet_count": 15,
+    "tweet_hour": "14"
+  },
+  {
+    "tweet_count": 14,
+    "tweet_hour": "00"
+  }
+]
 ----
 +
 . Most common day of the week to tweet
@@ -245,59 +301,121 @@ select * from twitter LIMIT 1;
 .Query
 [source, text]
 ----
+SELECT date_part_str(millis_to_str(to_num(createdAt)), "day_of_week") day_of_week, 
+       COUNT(1) tweet_count
+FROM   twitter 
+GROUP  BY date_part_str(millis_to_str(to_num(createdAt)), "day_of_week")
+ORDER  BY tweet_count DESC 
+LIMIT  5;
 ----
 +
 .Result
 [source, json]
 ----
+[
+  {
+    "day_of_week": 0,
+    "tweet_count": 40
+  },
+  {
+    "day_of_week": 5,
+    "tweet_count": 36
+  },
+  {
+    "day_of_week": 2,
+    "tweet_count": 36
+  },
+  {
+    "day_of_week": 6,
+    "tweet_count": 33
+  },
+  {
+    "day_of_week": 1,
+    "tweet_count": 33
+  }
+]
 ----
 +
-. Top 5 hashtags and counts in tweets
-+
-.Query
-[source, text]
-----
-----
-+
-.Result
-[source, json]
-----
-----
-+
-. Number of tweets on pre-defined topics: A, B, C
-+
-.Query
-[source, text]
-----
-----
-+
-.Result
-[source, json]
-----
-----
+RFE: Given a date, return the English name for it
 +
 . Top 3 mentions in tweets
 +
 .Query
 [source, text]
 ----
+select count(1) user_count, ue.screenName 
+    from twitter 
+    UNNEST userMentionEntities ue 
+    GROUP by ue.screenName 
+    ORDER by user_count DESC
+    LIMIT 5;
 ----
 +
 .Result
 [source, json]
 ----
+[
+  {
+    "screenName": "realDonaldTrump",
+    "user_count": 8
+  },
+  {
+    "screenName": "FoxNews",
+    "user_count": 7
+  },
+  {
+    "screenName": "CNN",
+    "user_count": 5
+  },
+  {
+    "screenName": "DanScavino",
+    "user_count": 5
+  },
+  {
+    "screenName": "mike_pence",
+    "user_count": 4
+  }
+]
 ----
 +
-. Top 3 tweets with RTs and Favorites
+TODO: Talk about `user_count` vs `User_count` based upon which field should be shown first.
++
+. Top 3 tweets with RTs
 +
 .Query
 [source, text]
 ----
+select retweetCount, text
+from twitter
+order by retweetCount
+limit 5;
 ----
 +
 .Result
 [source, json]
 ----
+[
+  {
+    "retweetCount": "10140",
+    "text": "Thank you to all of the men and women who protect & serve our communities 24/7/365! \n#LawEnforcementAppreciationDay… https://t.co/aqUbDipSgv"
+  },
+  {
+    "retweetCount": "10370",
+    "text": "We had a great News Conference at Trump Tower today. A couple of FAKE NEWS organizations were there but the people truly get what's going on"
+  },
+  {
+    "retweetCount": "10414",
+    "text": "these companies are able to move between all 50 states, with no tax or tariff being charged. Please be forewarned prior to making a very ..."
+  },
+  {
+    "retweetCount": "10416",
+    "text": "Somebody hacked the DNC but why did they not have \"hacking defense\" like the RNC has and why have they not responded to the terrible......"
+  },
+  {
+    "retweetCount": "10428",
+    "text": "The resolution being considered at the United Nations Security Council regarding Israel should be vetoed....cont: https://t.co/s8rXKKZNF1"
+  }
+]
 ----
 +
 . Original tweets vs RTs
@@ -305,10 +423,103 @@ select * from twitter LIMIT 1;
 .Query
 [source, text]
 ----
+select retweet, count(1) count from twitter
+group by retweet;
 ----
 +
 .Result
 [source, json]
 ----
+[
+  {
+    "count": 13,
+    "retweet": true
+  },
+  {
+    "count": 225,
+    "retweet": false
+  }
+]
 ----
++
+. Most common words
++
+.Query
+[source, text]
+----
+select count(1) count, word 
+FROM twitter 
+UNNEST split(text) word
+GROUP by word
+ORDER BY count DESC;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "count": 168,
+    "word": "the"
+  },
+  {
+    "count": 134,
+    "word": "to"
+  },
+  {
+    "count": 100,
+    "word": "and"
+  },
+
+  . . .
+
+  {
+    "count": 1,
+    "word": "Pres-Elect"
+  },
+  {
+    "count": 1,
+    "word": "dealing"
+  },
+  {
+    "count": 1,
+    "word": "asking"
+  }
+]  
+----
++
+. How many times the following words are mentioned? A, B, C
++
+.Query
+[source, text]
+----
+select count(1) count, lower(w) 
+from twitter  
+unnest split(text) w  
+WHERE lower(w) IN [ "media", "fake", "america"] 
+GROUP by lower(w) 
+ORDER BY count DESC;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "$1": "media",
+    "count": 11
+  },
+  {
+    "$1": "fake",
+    "count": 8
+  },
+  {
+    "$1": "america",
+    "count": 7
+  }
+]
+----
++
+
+TODO: All reserved words are CAPITAL
 
