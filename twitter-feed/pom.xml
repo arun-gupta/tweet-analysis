@@ -9,7 +9,6 @@
     <url>http://maven.apache.org</url>
     <properties>
         <twitter.user>realDonaldTrump</twitter.user>
-        <couchbase.host>ec2-35-166-14-124.us-west-2.compute.amazonaws.com</couchbase.host>
     </properties>
     <dependencies>
         <dependency>
@@ -30,6 +29,24 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>couchbase.props</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -59,6 +76,10 @@
                         <systemproperty>
                             <key>COUCHBASE_HOST</key>
                             <value>${couchbase.host}</value>
+                        </systemproperty>
+                        <systemproperty>
+                            <key>COUCHBASE_BUCKET_PASSWORD</key>
+                            <value>${couchbase.bucket.password}</value>
                         </systemproperty>
                     </systemProperties>
                 </configuration>
