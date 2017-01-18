@@ -78,6 +78,14 @@ public class CouchbaseUtil {
     public static Bucket getBucket() {
         while (null == bucket) {
             System.out.println("Trying to connect to the database");
+            String bucketPassword = System.getProperty("COUCHBASE_BUCKET_PASSWORD");
+            if (bucketPassword == null) {
+                bucketPassword = System.getenv("COUCHBASE_BUCKET_PASSWORD");
+            }
+            if (bucketPassword == null) {
+                throw new RuntimeException("Bucket password is null");
+            }
+            System.out.println("bucketPassword: " + bucketPassword);
             bucket = getCluster().openBucket(getBucketName(), 2L, TimeUnit.MINUTES);
 
             try {
