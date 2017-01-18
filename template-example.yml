@@ -13,7 +13,7 @@ Resources:
       Environment:
         Variables:
           COUCHBASE_HOST: <value>
-          BUCKET_PASSWORD: <value>
+          COUCHBASE_BUCKET_PASSWORD: <value>
       Role: arn:aws:iam::598307997273:role/microserviceRole
       Events:
         Timer:
