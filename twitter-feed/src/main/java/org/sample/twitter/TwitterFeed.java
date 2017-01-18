@@ -20,7 +20,7 @@ public class TwitterFeed {
         new TwitterFeed().readFeed(args[0]);
     }
 
-    void readFeed(String user) {
+    int readFeed(String user) {
         try {
             Twitter twitter = getTwitter();
             int page = 1;
@@ -36,7 +36,7 @@ public class TwitterFeed {
             List<Status> list = twitter.getUserTimeline(user, paging);
             if (list.isEmpty()) {
                 System.out.println("... no new tweets found since " + sinceId);
-                return;
+                return 0;
             } else {
                 System.out.println("... found " + list.size() + " tweets found.");
             }
@@ -51,6 +51,7 @@ public class TwitterFeed {
                         + "\n" + status.getText()
                         + "\n");
             });
+            return list.size();
         } catch (TwitterException ex) {
             throw new RuntimeException(ex);
         }

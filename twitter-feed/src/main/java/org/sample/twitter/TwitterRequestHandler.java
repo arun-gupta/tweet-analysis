@@ -13,9 +13,9 @@ public class TwitterRequestHandler implements RequestHandler<Request, String> {
         if (request.getName() == null)
             request.setName("realDonaldTrump");
         
-        new TwitterFeed().readFeed(request.getName());
+        int tweets = new TwitterFeed().readFeed(request.getName());
         
-        return "Updated tweets for " + request.getName() + "!";
+        return "Updated " + tweets + " tweets for " + request.getName() + "!";
     }
     
 }
