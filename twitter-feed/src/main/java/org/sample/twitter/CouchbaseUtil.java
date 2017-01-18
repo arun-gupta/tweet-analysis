@@ -86,7 +86,7 @@ public class CouchbaseUtil {
                 throw new RuntimeException("Bucket password is null");
             }
             System.out.println("bucketPassword: " + bucketPassword);
-            bucket = getCluster().openBucket(getBucketName(), 2L, TimeUnit.MINUTES);
+            bucket = getCluster().openBucket(getBucketName(), bucketPassword, 2L, TimeUnit.MINUTES);
 
             try {
                 Thread.sleep(3000);
