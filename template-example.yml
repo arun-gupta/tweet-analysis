@@ -12,8 +12,8 @@ Resources:
       MemorySize: 1024
       Environment:
         Variables:
-          COUCHBASE_HOST: ec2-35-166-14-124.us-west-2.compute.amazonaws.com
-          BUCKET_PASSWORD: test123
+          COUCHBASE_HOST: <value>
+          BUCKET_PASSWORD: <value>
       Role: arn:aws:iam::598307997273:role/microserviceRole
       Events:
         Timer:
