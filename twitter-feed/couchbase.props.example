@@ -1,0 +1,2 @@
+couchbase.host=<value>
+couchbase.bucket.password=<value>
