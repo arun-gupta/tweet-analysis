@@ -78,3 +78,524 @@ filename=twitter-backups-`date +%Y-%m-%d-%H-%M-%S`.tar.gz
 sudo tar czvf $filename /var/lib/couchbase/backups/
 s3cmd put $filename s3://arungupta.me/
 ```
+
+== Analyze Tweets using N1QL
+
+. Number of tweets stored
++
+.Query
+[source, text]
+----
+SELECT COUNT(*) tweet_count 
+FROM twitter;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "tweet_count": 267
+  }
+]
+----
++
+. One tweet
++
+.Query
+[source, text]
+----
+SELECT * 
+FROM twitter 
+LIMIT 1;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "twitter": {
+      "accessLevel": "0",
+      "contributors": [],
+      "createdAt": "1480828438000",
+      "currentUserRetweetId": "-1",
+      "displayTextRangeEnd": "-1",
+      "displayTextRangeStart": "-1",
+      "favoriteCount": "116356",
+      "favorited": false,
+      "geoLocation": null,
+      "hashtagEntities": [],
+      "id": "805278955150471168",
+      "inReplyToScreenName": null,
+      "inReplyToStatusId": "-1",
+      "inReplyToUserId": "-1",
+      "lang": "en",
+      "mediaEntities": [],
+      "place": null,
+      "possiblySensitive": false,
+      "quotedStatus": null,
+      "quotedStatusId": "-1",
+      "rateLimitStatus": null,
+      "retweet": false,
+      "retweetCount": "28330",
+      "retweeted": false,
+      "retweetedByMe": false,
+      "retweetedStatus": null,
+      "scopes": null,
+      "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+      "symbolEntities": [],
+      "text": "Just tried watching Saturday Night Live - unwatchable! Totally biased, not funny and the Baldwin impersonation just can't get any worse. Sad",
+      "truncated": false,
+      "urlentities": [],
+      "user": {
+        "accessLevel": "0",
+        "biggerProfileImageURL": "http://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_bigger.jpg",
+        "biggerProfileImageURLHttps": "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_bigger.jpg",
+        "contributorsEnabled": false,
+        "createdAt": "1237383998000",
+        "defaultProfile": false,
+        "defaultProfileImage": false,
+        "description": "President-elect of the United States",
+        "descriptionURLEntities": [],
+        "email": null,
+        "favouritesCount": "46",
+        "followRequestSent": false,
+        "followersCount": "19294404",
+        "friendsCount": "42",
+        "geoEnabled": true,
+        "id": "25073877",
+        "lang": "en",
+        "listedCount": "52499",
+        "location": "New York, NY",
+        "miniProfileImageURL": "http://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_mini.jpg",
+        "miniProfileImageURLHttps": "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_mini.jpg",
+        "name": "Donald J. Trump",
+        "originalProfileImageURL": "http://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2.jpg",
+        "originalProfileImageURLHttps": "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2.jpg",
+        "profileBackgroundColor": "6D5C18",
+        "profileBackgroundImageURL": "http://pbs.twimg.com/profile_background_images/530021613/trump_scotland__43_of_70_cc.jpg",
+        "profileBackgroundImageUrlHttps": "https://pbs.twimg.com/profile_background_images/530021613/trump_scotland__43_of_70_cc.jpg",
+        "profileBackgroundTiled": true,
+        "profileBannerIPadRetinaURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/ipad_retina",
+        "profileBannerIPadURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/ipad",
+        "profileBannerMobileRetinaURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/mobile_retina",
+        "profileBannerMobileURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/mobile",
+        "profileBannerRetinaURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/web_retina",
+        "profileBannerURL": "https://pbs.twimg.com/profile_banners/25073877/1479776952/web",
+        "profileImageURL": "http://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_normal.jpg",
+        "profileImageURLHttps": "https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_normal.jpg",
+        "profileLinkColor": "0D5B73",
+        "profileSidebarBorderColor": "BDDCAD",
+        "profileSidebarFillColor": "C5CEC0",
+        "profileTextColor": "333333",
+        "profileUseBackgroundImage": true,
+        "protected": false,
+        "rateLimitStatus": null,
+        "screenName": "realDonaldTrump",
+        "showAllInlineMedia": false,
+        "status": null,
+        "statusesCount": "34269",
+        "timeZone": "Eastern Time (US & Canada)",
+        "translator": false,
+        "url": "https://t.co/mZB2hymxC9",
+        "urlentity": {
+          "displayURL": "https://t.co/mZB2hymxC9",
+          "end": "23",
+          "expandedURL": "https://t.co/mZB2hymxC9",
+          "start": "0",
+          "text": "https://t.co/mZB2hymxC9",
+          "url": "https://t.co/mZB2hymxC9"
+        },
+        "utcOffset": "-18000",
+        "verified": true,
+        "withheldInCountries": null
+      },
+      "userMentionEntities": [],
+      "withheldInCountries": null
+    }
+  }
+]
+----
++
+. Top 5 tweeting days
++
+.Query
+[source, text]
+----
+SELECT SUBSTR(MILLIS_TO_STR(TO_NUM(createdAt)), 0, 10) tweet_date, 
+       COUNT(1) tweet_count
+FROM   twitter 
+GROUP  BY SUBSTR(MILLIS_TO_STR(TO_NUM(createdAt)), 0, 10) 
+ORDER  BY COUNT(1) DESC 
+LIMIT  5;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "tweet_count": 12,
+    "tweet_date": "2017-01-06"
+  },
+  {
+    "tweet_count": 11,
+    "tweet_date": "2016-12-04"
+  },
+  {
+    "tweet_count": 10,
+    "tweet_date": "2017-01-03"
+  },
+  {
+    "tweet_count": 10,
+    "tweet_date": "2017-01-04"
+  },
+  {
+    "tweet_count": 9,
+    "tweet_date": "2016-12-10"
+  }
+]
+----
++
+. How many days tweeted X times
++
+.Query
+[source, text]
+----
+SELECT a.tweet_count, count(1) days FROM (
+SELECT SUBSTR(MILLIS_TO_STR(TO_NUM(createdAt)), 0, 10) tweet_date, 
+       COUNT(1) tweet_count
+FROM   twitter 
+GROUP  BY SUBSTR(MILLIS_TO_STR(TO_NUM(createdAt)), 0, 10)
+) a
+GROUP BY a.tweet_count
+ORDER BY a.tweet_count DESC;
+----
++
+.Result
+[source, text]
+----
+[
+  {
+    "days": 1,
+    "tweet_count": 13
+  },
+  {
+    "days": 1,
+    "tweet_count": 12
+  },
+  {
+    "days": 1,
+    "tweet_count": 11
+  },
+  {
+    "days": 2,
+    "tweet_count": 10
+  },
+  {
+    "days": 1,
+    "tweet_count": 9
+  },
+  {
+    "days": 7,
+    "tweet_count": 8
+  },
+  {
+    "days": 3,
+    "tweet_count": 7
+  },
+  {
+    "days": 7,
+    "tweet_count": 6
+  },
+  {
+    "days": 5,
+    "tweet_count": 5
+  },
+  {
+    "days": 5,
+    "tweet_count": 4
+  },
+  {
+    "days": 11,
+    "tweet_count": 3
+  },
+  {
+    "days": 2,
+    "tweet_count": 2
+  },
+  {
+    "days": 1,
+    "tweet_count": 1
+  }
+]
+----
++
+. Most common hour in a day to tweet
++
+.Query
+[source, text]
+----
+SELECT SUBSTR(MILLIS_TO_STR(TO_NUM(createdAt)), 11, 2) tweet_hour, 
+       COUNT(1) tweet_count
+FROM   twitter 
+GROUP  BY SUBSTR(MILLIS_TO_STR(TO_NUM(createdAt)), 11, 2) 
+ORDER  BY tweet_count DESC 
+LIMIT  5;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "tweet_count": 39,
+    "tweet_hour": "13"
+  },
+  {
+    "tweet_count": 27,
+    "tweet_hour": "12"
+  },
+  {
+    "tweet_count": 26,
+    "tweet_hour": "11"
+  },
+  {
+    "tweet_count": 20,
+    "tweet_hour": "14"
+  },
+  {
+    "tweet_count": 14,
+    "tweet_hour": "00"
+  }
+]
+----
++
+. Day of the week to tweet
++
+.Query
+[source, text]
+----
+SELECT DATE_PART_STR(MILLIS_TO_STR(TO_NUM(createdAt)), "day_of_week") day_of_week, 
+       COUNT(1) tweet_count
+FROM   twitter 
+GROUP  BY DATE_PART_STR(MILLIS_TO_STR(TO_NUM(createdAt)), "day_of_week")
+ORDER  BY tweet_count DESC;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "day_of_week": 0,
+    "tweet_count": 40
+  },
+  {
+    "day_of_week": 5,
+    "tweet_count": 36
+  },
+  {
+    "day_of_week": 2,
+    "tweet_count": 36
+  },
+  {
+    "day_of_week": 6,
+    "tweet_count": 33
+  },
+  {
+    "day_of_week": 1,
+    "tweet_count": 33
+  }
+]
+----
++
+RFE: Given a date, return the English name for it
++
+. Top 5 mentions in tweets
++
+.Query
+[source, text]
+----
+SELECT COUNT(1) user_count, ue.screenName 
+    FROM twitter 
+    UNNEST userMentionEntities ue 
+    GROUP by ue.screenName 
+    ORDER by user_count DESC
+    LIMIT 5;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "screenName": "realDonaldTrump",
+    "user_count": 8
+  },
+  {
+    "screenName": "FoxNews",
+    "user_count": 7
+  },
+  {
+    "screenName": "CNN",
+    "user_count": 5
+  },
+  {
+    "screenName": "DanScavino",
+    "user_count": 5
+  },
+  {
+    "screenName": "mike_pence",
+    "user_count": 4
+  }
+]
+----
++
+TODO: Talk about `user_count` vs `User_count` based upon which field should be shown first.
++
+. Top 3 tweets with RTs
++
+.Query
+[source, text]
+----
+SELECT retweetCount, text
+FROM twitter
+ORDER BY retweetCount
+LIMIT 5;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "retweetCount": "10110",
+    "text": "the American people. I have no doubt that we will, together, MAKE AMERICA GREAT AGAIN!"
+  },
+  {
+    "retweetCount": "10140",
+    "text": "Thank you to all of the men and women who protect & serve our communities 24/7/365! \n#LawEnforcementAppreciationDay… https://t.co/aqUbDipSgv"
+  },
+  {
+    "retweetCount": "10370",
+    "text": "We had a great News Conference at Trump Tower today. A couple of FAKE NEWS organizations were there but the people truly get what's going on"
+  },
+  {
+    "retweetCount": "10414",
+    "text": "these companies are able to move between all 50 states, with no tax or tariff being charged. Please be forewarned prior to making a very ..."
+  },
+  {
+    "retweetCount": "10416",
+    "text": "Somebody hacked the DNC but why did they not have \"hacking defense\" like the RNC has and why have they not responded to the terrible......"
+  }
+]
+----
++
+. Original tweets vs RTs
++
+.Query
+[source, text]
+----
+SELECT retweet, count(1) count
+FROM twitter
+GROUP BY retweet;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "count": 13,
+    "retweet": true
+  },
+  {
+    "count": 225,
+    "retweet": false
+  }
+]
+----
++
+. Most common words
++
+.Query
+[source, text]
+----
+SELECT count(1) count, word 
+FROM twitter 
+UNNEST split(text) word
+GROUP BY word
+ORDER BY count DESC;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "count": 168,
+    "word": "the"
+  },
+  {
+    "count": 134,
+    "word": "to"
+  },
+  {
+    "count": 100,
+    "word": "and"
+  },
+
+  . . .
+
+  {
+    "count": 1,
+    "word": "Pres-Elect"
+  },
+  {
+    "count": 1,
+    "word": "dealing"
+  },
+  {
+    "count": 1,
+    "word": "asking"
+  }
+]  
+----
++
+. How many times the following words are mentioned? A, B, C
++
+.Query
+[source, text]
+----
+SELECT COUNT(1) count, LOWER(w) word
+FROM twitter  
+UNNEST SPLIT(text) w  
+WHERE LOWER(w) IN [ "media", "fake", "america"] 
+GROUP by LOWER(w) 
+ORDER BY count DESC;
+----
++
+.Result
+[source, json]
+----
+[
+  {
+    "count": 12,
+    "word": "media"
+  },
+  {
+    "count": 9,
+    "word": "fake"
+  },
+  {
+    "count": 8,
+    "word": "america"
+  }
+]
+----
++
+
+TODO: All reserved words are CAPITAL
+
