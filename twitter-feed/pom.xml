@@ -45,6 +45,7 @@
                         <configuration>
                             <files>
                                 <file>dynamodb.props</file>
+                                <file>${user.home}/.aws/credentials</file>
                             </files>
                         </configuration>
                     </execution>
@@ -96,6 +97,26 @@
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.bazaarvoice.maven.plugins</groupId>
+                <artifactId>s3-upload-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <accessKey>${aws_access_key_id}</accessKey>
+                    <secretKey>${aws_secret_access_key}</secretKey>
+                    <bucketName>arungupta</bucketName>
+                    <source>target/${project.artifactId}-${project.version}.jar</source>
+                    <destination>${project.artifactId}-${project.version}.jar</destination>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>s3-upload</goal>
                         </goals>
                     </execution>
                 </executions>
