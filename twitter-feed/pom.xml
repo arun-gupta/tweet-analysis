@@ -16,16 +16,19 @@
             <artifactId>twitter4j-core</artifactId>
             <version>4.0.6</version>
         </dependency>
-        <dependency>
-            <groupId>com.couchbase.client</groupId>
-            <artifactId>java-client</artifactId>
-            <version>2.4.0</version>
-        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-core -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
             <version>1.1.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-dynamodb -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-dynamodb</artifactId>
+            <version>1.11.128</version>
+        </dependency>        
+        
     </dependencies>
     <build>
         <plugins>
@@ -41,7 +44,7 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>couchbase.props</file>
+                                <file>dynamodb.props</file>
                             </files>
                         </configuration>
                     </execution>
@@ -74,14 +77,11 @@
                     </arguments>
                     <systemProperties>
                         <systemproperty>
-                            <key>COUCHBASE_HOST</key>
-                            <value>${couchbase.host}</value>
-                        </systemproperty>
-                        <systemproperty>
-                            <key>COUCHBASE_BUCKET_PASSWORD</key>
-                            <value>${couchbase.bucket.password}</value>
+                            <key>DYNAMODB_REGION</key>
+                            <value>${dynamodb.region}</value>
                         </systemproperty>
                     </systemProperties>
+                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
                 </configuration>
             </plugin>
             <plugin>
