@@ -1,6 +1,8 @@
-= Analyze Twitter Feeds using a NoSQL Database
+= Analyze Twitter Feeds using AWS Lambda and DynamoDB
 
-The `master` branch uses DynamoDB. Refer to https://github.com/arun-gupta/tweet-analysis-nosql/tree/couchbase[couchbase] branch for Couchbase setup.
+This sample project uses an AWS Lambda function to retrieve and stores tweets of a tweeter. The tweets are stored in an Amazon DynamoDB instance. The function wakes up every 30 minutes.
+
+The `master` branch uses DynamoDB. Refer to https://github.com/arun-gupta/tweet-analysis-nosql/tree/couchbase[couchbase] branch for the Couchbase setup.
 
 == Configure Twitter Credentials
 
