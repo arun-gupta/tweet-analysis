@@ -1,6 +1,6 @@
 package org.sample.twitter;
 
-import com.couchbase.client.deps.com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -9,6 +9,7 @@ import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterObjectFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
@@ -25,7 +26,7 @@ public class TwitterFeed {
             Twitter twitter = getTwitter();
             int page = 1;
             int count = 200;
-            long sinceId = CouchbaseUtil.lastTweetId();
+            long sinceId = DynamoDBUtil.lastTweetId();
             Paging paging;
             if (sinceId > 0) {
                 paging = new Paging(page, count, sinceId);
@@ -42,14 +43,13 @@ public class TwitterFeed {
             }
 
             list.stream().forEach((Status status) -> {
-//                String json = TwitterObjectFactory.getRawJSON(status);
-//                CouchbaseUtil.toJson(status);
-                CouchbaseUtil.saveTwitterStatus(status);
-                System.out.println("Sent by: @"
-                        + status.getUser().getScreenName()
-                        + " - " + status.getUser().getName()
-                        + "\n" + status.getText()
-                        + "\n");
+                String json = TwitterObjectFactory.getRawJSON(status);
+                DynamoDBUtil.saveTwitterStatus(json);
+//                System.out.println("Sent by: @"
+//                        + status.getUser().getScreenName()
+//                        + " - " + status.getUser().getName()
+//                        + "\n" + status.getText()
+//                        + "\n");
             });
             return list.size();
         } catch (TwitterException ex) {
