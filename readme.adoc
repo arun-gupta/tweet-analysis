@@ -1,19 +1,18 @@
-= Analyze Twitter Feeds using Couchbase/N1QL
+= Analyze Twitter Feeds using a NoSQL Database
+
+The `master` branch uses DynamoDB. Refer to https://github.com/arun-gupta/tweet-analysis-nosql/tree/couchbase[couchbase] branch for Couchbase setup.
 
 == Configure Twitter Credentials
 
 . Create a https://apps.twitter.com/app/new[new Twitter app]
-. Copy `src/main/resources/twitter.json.template` to `src/main/resources/twitter.json`
+. Copy `twitter-feed/src/main/resources/twitter.json.template` to `twitter-feed/src/main/resources/twitter.json`
 . Specify the required values
 
-== Install and Configure Couchbase Services
+== Create DynamoDB Table
 
-. Setup Couchbase as explained at https://github.com/couchbase-guides/couchbase-amazon-cli
-. Create a bucket `twitter` with password.
-. Create primary index `create primary index on twitter;`
-. Create secondary index `create index twitter_created_at on twitter(createdAt);`
-. Copy `twitter-feed/couchbase.props.example` to `couchbase.props`
-. Specify the required values
+. Create a table `Twitter` with password.
+.. Primary index using `id` and a secondary index on `createdAt`.
+. Specify the correct region for DynamoDB table in `twitter-feed/dynamodb.props`
 
 == Run Application using CLI
 
@@ -39,44 +38,6 @@ aws cloudformation deploy \
 aws cloudformation delete-stack \
 --stack-name twitter \
 --region us-west-2
-```
-
-== Configure Database Backup
-
-. Login to host: `ssh -i ~/.ssh/arun-cb-west2.pem ubuntu@<public-ip>`
-. Configure `s3cmd`
-.. Import S3tools signing key: `wget -O- -q http://s3tools.org/repo/deb-all/stable/s3tools.key | sudo apt-key add -`
-.. Add the repo to `sources.list`: `sudo wget -O/etc/apt/sources.list.d/s3tools.list http://s3tools.org/repo/deb-all/stable/s3tools.list`
-.. Refresh package cache and install the newest s3cmd: `sudo apt-get update && sudo apt-get install s3cmd`
-.. Configure s3cmd: `s3cmd --configure`
-+
-```
-New settings:
-  Access Key: <access key>
-  Secret Key: <secret key>
-  Encryption password: <password>
-  Path to GPG program: /usr/bin/gpg
-  Use HTTPS protocol: False
-  HTTP Proxy server name: 
-  HTTP Proxy server port: 0
-```
-+
-. Backup
-.. Make backup directory: `sudo mkdir /var/lib/couchbase/backups`
-.. Change perms: `sudo chmod 777 /var/lib/couchbase/backups/`
-.. Use the script to initiate backup:
-+
-```
-#!/bin/sh
-/opt/couchbase/bin/cbbackup \
-    http://localhost:8091 \
-    /var/lib/couchbase/backups/ \
-    -u <couchbase-admin-user> \
-    -p <couchbase-admin-password> \
-    -b twitter
-filename=twitter-backups-`date +%Y-%m-%d-%H-%M-%S`.tar.gz
-sudo tar czvf $filename /var/lib/couchbase/backups/
-s3cmd put $filename s3://arungupta.me/
 ```
 
 == Analyze Tweets using N1QL
