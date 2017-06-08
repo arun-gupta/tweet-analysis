@@ -13,7 +13,7 @@ The `master` branch uses DynamoDB. Refer to https://github.com/arun-gupta/tweet-
 == Create DynamoDB Table
 
 . Create a table `Twitter` with password.
-.. Primary index using `id` and a secondary index on `createdAt`.
+.. Primary index using `id_str`.
 . Specify the correct region for DynamoDB table in `twitter-feed/dynamodb.props`
 
 == Run Application using CLI
@@ -29,9 +29,9 @@ The `master` branch uses DynamoDB. Refer to https://github.com/arun-gupta/tweet-
 +
 ```
 aws cloudformation deploy \
---template-file template.yml \
+--template-file app-sam.yml \
 --stack-name twitter \
---region us-west-2
+--region us-west-1
 ```
 +
 . Delete the stack (if a stack needs to be updated):
