@@ -22,7 +22,7 @@ The `master` branch uses DynamoDB. Refer to https://github.com/arun-gupta/tweet-
 == Deploy Lambda
 
 . Create package: `mvn package`
-. Upload JAR to S3: `aws s3 cp target/twitter-feed-1.0-SNAPSHOT.jar s3://arungupta.me/twitter-feed-1.0-SNAPSHOT.jar`
+. Upload JAR to S3: `mvn install`
 . Deploy Lambda stack:
 +
 ```
